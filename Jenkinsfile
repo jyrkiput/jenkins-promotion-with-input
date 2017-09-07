@@ -1,4 +1,5 @@
 pipeline {
+    //agent is none so no executors are preserved
     agent none
   stages {
     stage('Deploy to test') {
@@ -13,7 +14,6 @@ pipeline {
         steps {
             milestone 1
             input 'Continue'
-            milestone 2
         }
     }
 
@@ -21,7 +21,7 @@ pipeline {
         agent any
         steps {
             lock(resource: 'staging-server', inversePrecedence: true) {
-                    milestone 3
+                    milestone 2
                     echo "staging"
             }
         }
@@ -30,9 +30,8 @@ pipeline {
     stage('Deploy to production?') {
         agent none
         steps {
-            milestone 4
+            milestone 3
             input 'Continue'
-            milestone 5
         }
     }
 
@@ -40,13 +39,11 @@ pipeline {
         agent any
         steps {
             lock(resource: 'production-server', inversePrecedence: true) {
-                    milestone 6
+                    milestone 4
                     echo "production"
             }
         }
     }
   }
-  
-
-    
+     
 }
